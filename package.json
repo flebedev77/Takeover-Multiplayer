@@ -1,0 +1,26 @@
+{
+  "name": "takeover",
+  "version": "1.0.0",
+  "description": "https://takeover.game-files.crazygames.com/takeover/1/index.html but multiplayer",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "npm i express socket.io",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flebedev77/Takeover-Multiplayer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/flebedev77/Takeover-Multiplayer/issues"
+  },
+  "homepage": "https://github.com/flebedev77/Takeover-Multiplayer#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.4"
+  }
+}
