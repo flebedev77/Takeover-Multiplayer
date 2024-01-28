@@ -8,6 +8,7 @@ window.addEventListener("resize", function() {
 });
 
 exitBtn.addEventListener("click", function() {
+    //if you only find this now - Should have read the fucking source code
     window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley";
 })
 startBtn.addEventListener("click", function() {
@@ -16,7 +17,7 @@ startBtn.addEventListener("click", function() {
 })
 
 function searchGame() {
-    
+
 }
 
 function init() {
