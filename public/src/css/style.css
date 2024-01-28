@@ -9,3 +9,38 @@ body {
     bottom: 0;
     right: 0;
 }
+.start-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgb(255, 255, 255);
+    padding: 10px;
+    z-index: 100;
+}
+
+button {
+    border-radius: 0;
+    border: 1px rgba(0, 0, 0, 0.9) solid;
+    background: rgba(235, 235, 235, 0.9);
+    padding: 5px 10px;
+    font-size: 17px;
+    outline: none;
+}
+
+button:hover {
+    border-radius: 0;
+    border: 1px rgba(26, 26, 26, 0.8) solid;
+    background: rgba(241, 241, 241, 0.8);
+    padding: 5px 10px;
+    font-size: 17px;
+    outline: none;
+}
+
+.start-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: max-content;
+    margin-inline: auto;
+}
