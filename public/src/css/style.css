@@ -44,3 +44,12 @@ button:hover {
     width: max-content;
     margin-inline: auto;
 }
+
+.center-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    z-index: 100;
+}

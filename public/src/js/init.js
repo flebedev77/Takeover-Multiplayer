@@ -1,6 +1,9 @@
 const socket = io();
 
 window.addEventListener("load", function() {
+    centerOverlay.style.display = "none";
+
+    //resize the canvas
     resizeCanvasToWindow();
 });
 window.addEventListener("resize", function() {
@@ -15,10 +18,6 @@ startBtn.addEventListener("click", function() {
     startBtn.parentElement.parentElement.style.display = "none";
     searchGame();
 })
-
-function searchGame() {
-
-}
 
 function init() {
     
