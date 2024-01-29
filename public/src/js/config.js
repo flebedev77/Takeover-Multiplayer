@@ -15,3 +15,8 @@ let searchGame = function() {
 
 //The host room id (Used by the server)
 let roomId = "";
+
+//initialize the base the current client owns
+let yourBase = null;
+
+let CrimsonImage;

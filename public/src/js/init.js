@@ -20,5 +20,8 @@ startBtn.addEventListener("click", function() {
 })
 
 function init() {
-    
+    CrimsonImage = UTILS.image.loadImage("http://" + window.location.host + "/src/img/Crimson.png");
+
+    //x, y, ysize, image - width is handled with the aspect ratio
+    yourBase = new Base(100, 100, 50, CrimsonImage);
 }

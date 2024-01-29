@@ -14,6 +14,7 @@ io.on("connection", (socket) => {
     util.log(`${socket.id} Online`);
 
     socket.on("disconnect", () => {
+        if (socket.id == waitingClient) waitingClient = null;
         util.log(socket.id + " Offline");
     })
 

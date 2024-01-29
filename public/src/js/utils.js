@@ -25,5 +25,12 @@ const UTILS = {
                 ctx.fillText("FPS: " + this.framesPerSecond, 10, 10);
             }
         }
+    },
+    image: {
+        loadImage: function(src) {
+            const i = new Image();
+            i.src = src;
+            return i;
+        }
     }
 }

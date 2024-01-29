@@ -8,6 +8,8 @@ searchGame = function () {
     socket.on("foundGame", (id) => {
         centerOverlay.style.display = "none";
         roomId = id;
+
+        init();
     })
 
 }
@@ -17,6 +19,8 @@ function loop() {
     CTX.clearRect(0, 0, CANVAS.width, CANVAS.height);
 
     UTILS.time.updateFps(CTX);
+
+    yourBase.draw(CTX);
 
     requestAnimationFrame(loop);
 }
