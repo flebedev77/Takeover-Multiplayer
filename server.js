@@ -10,26 +10,52 @@ const io = require("socket.io")(server);
 
 let waitingClient = null; //the client socket id which is waiting for a person to versus
 
+const serverMinPing = 500;
+
+class Base {
+    constructor(x, y, id) {
+        this.position = {
+            x,
+            y
+        };
+        this.id = id;
+    }
+}
+
+const bases = [];
+
+const socketData = new Map();
+
 io.on("connection", (socket) => {
     util.log(`${socket.id} Online`);
 
     socket.on("disconnect", () => {
+        socketData.delete(socket.id);
         if (socket.id == waitingClient) waitingClient = null;
         util.log(socket.id + " Offline");
     })
 
     //when called from the client when the puser presses find game button
     //pairs 2 sockets to the id of the one which calls this first
-    socket.on("searchGame", () => {
+    socket.on("searchGame", (screen) => {
+        //if no-one was waiting start waiting
         if (waitingClient == null) {
             waitingClient = socket.id;
             socket.join(socket.id);
 
             util.log("Client waiting for an opponent with id " + socket.id);
         } else {
+            //if someone was waiting join them
             socket.join(waitingClient);
 
             util.log("Starting game with " + socket.id + " and " + waitingClient);
+
+            //keep data on who is playing against who
+            socketData.set(waitingClient, { opponent: socket.id });
+            socketData.set(socket.id, { opponent: waitingClient });
+
+            bases.push(new Base(Math.floor(Math.random() * screen.w), Math.floor(Math.random() * screen.h), socket.id));
+            bases.push(new Base(Math.floor(Math.random() * screen.w), Math.floor(Math.random() * screen.h), waitingClient));
 
             io.to(waitingClient).emit("foundGame", waitingClient);
             waitingClient = null;
@@ -37,3 +63,22 @@ io.on("connection", (socket) => {
     })
 })
 
+setInterval(function () {
+    io.sockets.sockets.forEach((socket, socketId) => {
+        socket.rooms.forEach((room) => {
+            socket.to(room).emit("heartbeat", bases.filter((base) => { //send only our base
+                if (base.id == socketId) {
+                    return true;
+                }
+                return false;
+            })[0],
+                bases.filter((base) => {
+                    if (base.id == socketData.get(socketId).opponent) {
+                        return true;
+                    }
+                    return false;
+                })[0]
+            )
+        });
+    })
+}, serverMinPing);

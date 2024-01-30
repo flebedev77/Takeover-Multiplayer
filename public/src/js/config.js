@@ -18,5 +18,9 @@ let roomId = "";
 
 //initialize the base the current client owns
 let yourBase = null;
+let otherBase = null;
 
 let CrimsonImage;
+
+let NetworkPing = 100;
+let NetworkInterval = null;

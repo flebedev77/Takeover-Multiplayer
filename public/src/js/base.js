@@ -13,3 +13,15 @@ class Base {
         ctx.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);
     }
 }
+
+class Crimson extends Base {
+    constructor(x, y, h) {
+        super(x, y, h, UTILS.image.loadImage(window.origin + "/src/img/Crimson.png"));
+    }
+}
+
+class Grass extends Base {
+    constructor(x, y, h) {
+        super(x, y, h, UTILS.image.loadImage(window.origin + "/src/img/Grass.png"));
+    }
+}
