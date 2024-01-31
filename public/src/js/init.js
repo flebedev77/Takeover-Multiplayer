@@ -20,8 +20,6 @@ startBtn.addEventListener("click", function() {
 })
 
 function init() {
-    CrimsonImage = UTILS.image.loadImage("http://" + window.location.host + "/src/img/Crimson.png");
-
     //x, y, ysize, image - width is handled with the aspect ratio
     yourBase = new Grass(0, 0, 50);
     otherBase = new Crimson(0, 0, 50);

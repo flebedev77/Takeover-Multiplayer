@@ -20,7 +20,5 @@ let roomId = "";
 let yourBase = null;
 let otherBase = null;
 
-let CrimsonImage;
-
 let NetworkPing = 100;
 let NetworkInterval = null;

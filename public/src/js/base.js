@@ -5,7 +5,7 @@ class Base {
             y
         };
         this.aspectRatio = img.width / img.height;
-        this.width = scale * this.aspectRatio;
+        this.width = scale// * this.aspectRatio;
         this.height = scale;
         this.image = img;
     }
@@ -16,12 +16,12 @@ class Base {
 
 class Crimson extends Base {
     constructor(x, y, h) {
-        super(x, y, h, UTILS.image.loadImage(window.origin + "/src/img/Crimson.png"));
+        super(x, y, h, UTILS.image.loadImage(window.origin + "/src/img/png/Crimson.png"));
     }
 }
 
 class Grass extends Base {
     constructor(x, y, h) {
-        super(x, y, h, UTILS.image.loadImage(window.origin + "/src/img/Grass.png"));
+        super(x, y, h, UTILS.image.loadImage(window.origin + "/src/img/png/Grass.png"));
     }
 }

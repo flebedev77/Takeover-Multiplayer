@@ -41,7 +41,6 @@ io.on("connection", (socket) => {
         //if no-one was waiting start waiting
         if (waitingClient == null) {
             waitingClient = socket.id;
-            socket.join(socket.id);
 
             util.log("Client waiting for an opponent with id " + socket.id);
         } else {
@@ -65,20 +64,24 @@ io.on("connection", (socket) => {
 
 setInterval(function () {
     io.sockets.sockets.forEach((socket, socketId) => {
-        socket.rooms.forEach((room) => {
-            socket.to(room).emit("heartbeat", bases.filter((base) => { //send only our base
-                if (base.id == socketId) {
+        if (!socketData.get(socketId)) return;
+
+        let room;
+        socket.rooms.forEach((r) => {
+            room = r;
+        });
+        socket.emit("heartbeat", bases.filter((base) => { //send only our base
+            if (base.id == socketId) {
+                return true;
+            }
+            return false;
+        })[0],
+            bases.filter((base) => {
+                if (base.id == socketData.get(socketId).opponent) {
                     return true;
                 }
                 return false;
-            })[0],
-                bases.filter((base) => {
-                    if (base.id == socketData.get(socketId).opponent) {
-                        return true;
-                    }
-                    return false;
-                })[0]
-            )
-        });
+            })[0]
+        )
     })
 }, serverMinPing);

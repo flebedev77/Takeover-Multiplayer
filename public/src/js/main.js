@@ -30,9 +30,11 @@ function loop() {
 }
 
 
-socket.on("heartbeat", (otherBase, ourBase) => {
-    console.log(ourBase);
-    console.log(otherBase);
-    //yourBase.position = ourBase.position;
-    //otherBase.position = otherBase.position;
+socket.on("heartbeat", (ourBase, other) => {
+    // console.log(ourBase);
+    //console.log(otherBase);
+    if (ourBase == null || other == null) return;
+
+    yourBase.position = ourBase.position;
+    otherBase.position = other.position;
 })
