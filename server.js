@@ -40,6 +40,7 @@ io.on("connection", (socket) => {
     socket.on("searchGame", (screen) => {
         //if no-one was waiting start waiting
         if (waitingClient == null) {
+            //joining to a room with own id is unessesary because socketio does that by default
             waitingClient = socket.id;
 
             util.log("Client waiting for an opponent with id " + socket.id);
