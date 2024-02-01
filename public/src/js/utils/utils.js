@@ -13,6 +13,12 @@ class Vector {
     }
 }
 
+function loadImage(src) {
+    const i = new Image();
+    i.src = src;
+    return i;
+}
+
 const UTILS = {
     time: {
         prevFrameTime: Date.now(),
@@ -31,8 +37,8 @@ const UTILS = {
             if (ctx) {
                 //drawing
                 ctx.fillStyle = "white";
-                ctx.font = "15px sans-serif normal";
-                ctx.fillText("FPS: " + this.framesPerSecond, 10, 10);
+                ctx.font = "normal 15px sans-serif";
+                ctx.fillText("FPS: " + this.framesPerSecond, 50, 30);
             }
         }
     },
@@ -41,6 +47,18 @@ const UTILS = {
             const i = new Image();
             i.src = src;
             return i;
+        },
+        FACTIONS: {
+            Crimson: loadImage(window.origin + "/src/img/png/Crimson.png"),
+            Grass: loadImage(window.origin + "/src/img/png/Grass.png"),
+            Ice: loadImage(window.origin + "/src/img/png/Ice.png"),
+            Undead: loadImage(window.origin + "/src/img/png/Undead.png")
         }
+    },
+    FACTIONS: {
+        Grass: 1,
+        Crimson: 2,
+        Ice: 3,
+        Undead: 4
     }
 }

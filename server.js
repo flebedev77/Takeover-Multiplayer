@@ -13,11 +13,12 @@ let waitingClient = null; //the client socket id which is waiting for a person t
 const serverMinPing = 500;
 
 class Base {
-    constructor(x, y, id) {
+    constructor(x, y, faction, id) {
         this.position = {
             x,
             y
         };
+        this.faction = faction;
         this.id = id;
     }
 }
@@ -54,8 +55,8 @@ io.on("connection", (socket) => {
             socketData.set(waitingClient, { opponent: socket.id });
             socketData.set(socket.id, { opponent: waitingClient });
 
-            bases.push(new Base(Math.floor(Math.random() * screen.w), Math.floor(Math.random() * screen.h), socket.id));
-            bases.push(new Base(Math.floor(Math.random() * screen.w), Math.floor(Math.random() * screen.h), waitingClient));
+            bases.push(new Base(Math.floor(Math.random() * screen.w), Math.floor(Math.random() * screen.h), util.PickRandomFaction(), socket.id));
+            bases.push(new Base(Math.floor(Math.random() * screen.w), Math.floor(Math.random() * screen.h), util.PickRandomFaction(), waitingClient));
 
             io.to(waitingClient).emit("foundGame", waitingClient);
             waitingClient = null;
