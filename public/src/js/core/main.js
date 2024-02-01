@@ -62,3 +62,8 @@ socket.on("heartbeat", (ourBase, other) => {
             otherBase = new Undead(other.position.x, other.position.y, otherBase.width);
     }
 })
+
+socket.on("opponentLeft", () => {
+    alert("Your opponent left");
+    window.location.reload(); //later replace with reinitialisiatrion (can't spell)
+})

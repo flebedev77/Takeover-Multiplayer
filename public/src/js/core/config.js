@@ -22,3 +22,6 @@ let otherBase = null;
 
 let NetworkPing = 100;
 let NetworkInterval = null;
+
+//paths
+let paths = [];
