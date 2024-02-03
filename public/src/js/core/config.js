@@ -29,3 +29,10 @@ let NetworkInterval = null;
 
 //paths
 let paths = [];
+
+//units
+let yourUnits = [];
+let otherUnits = [];
+
+//mouse drag moving
+let selectedUnit = null;

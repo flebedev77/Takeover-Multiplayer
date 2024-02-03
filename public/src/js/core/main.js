@@ -28,6 +28,16 @@ function loop() {
         path.draw(CTX);
     })
 
+    yourUnits.forEach((unit) => {
+        unit.update();
+        unit.draw(CTX);
+    })
+
+    otherUnits.forEach((unit) => {
+        unit.update();
+        unit.draw(CTX);
+    })
+
     yourBase.draw(CTX);
     CTX.fillStyle = "white";
     CTX.textAlign = "center";
@@ -100,4 +110,45 @@ window.onclick = function(e) {
         createUnitOverlay.style.left = yourBase.position.x + "px";
     } else
         createUnitOverlay.style.display = "none";
+}
+
+guardButton.onclick = function() {
+    yourUnits.push(new Guard(yourBase.position.x+yourBase.width/2, yourBase.position.y+yourBase.height/2));
+    createUnitOverlay.style.display = "none";
+
+    socket.emit("createUnit", { type: UTILS.UNITS.TYPE.Guard, position: yourUnits[yourUnits.length-1].position });
+}
+archerButton.onclick = function() {
+    yourUnits.push(new Archer(yourBase.position.x+yourBase.width/2, yourBase.position.y+yourBase.height/2))
+    createUnitOverlay.style.display = "none";
+
+    socket.emit("createUnit", { type: UTILS.UNITS.TYPE.Archer, position: yourUnits[yourUnits.length-1].position });
+}
+
+window.onmousedown = function(e) {
+    let foundUnit = false;
+    //check if we clicked on a unit an keep track if we did
+    yourUnits.forEach((unit) => {
+        if (UTILS.collision.PointCircle(e.x, e.y, unit.iconPosition.x+unit.iconScale/2, unit.iconPosition.y+unit.iconScale/2, unit.iconScale)) {
+            selectedUnit = unit;
+            foundUnit = true;
+        }
+    })
+
+    //if we clicked in thin air deselect unit
+    if (foundUnit == false) {
+        selectedUnit = null;
+    }
+
+    console.log(selectedUnit);
+}
+
+window.onmouseup = function(e) {
+    //if we have a selected unit then move it to the point where we released
+    if (selectedUnit) {
+        selectedUnit.target = new Vector(e.x, e.y);
+
+        console.log(selectedUnit.target);
+        selectedUnit = null;
+    }
 }

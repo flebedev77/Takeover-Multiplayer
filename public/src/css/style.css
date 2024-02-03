@@ -60,7 +60,10 @@ button:hover {
     position: fixed;
     background: #345d37e1;
     border-radius: 100vmax;
-    border: 12px solid #e4a52a;
+    border: 12px solid #f3cd72;
+    border-bottom-color: #96661e;
+    border-left-color: #ce9d2a;
+    border-right-color: #ce9d2a;
     z-index: 1000;
     display: flex;
     gap: 10px;

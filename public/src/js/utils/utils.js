@@ -66,6 +66,10 @@ const UTILS = {
             Grass: loadImage(window.origin + "/src/img/png/Grass.png"),
             Ice: loadImage(window.origin + "/src/img/png/Ice.png"),
             Undead: loadImage(window.origin + "/src/img/png/Undead.png")
+        },
+        UNITICONS: {
+            Archer: loadImage(window.origin + "/src/img/png/GArchers.png"),
+            Guard: loadImage(window.origin + "/src/img/png/GSwords.png")
         }
     },
     FACTIONS: {
@@ -109,6 +113,30 @@ const UTILS = {
                 y1 + h1 >= y2
             ) return true;
             return false;
+        },
+        PointCircle: function(px, py, cx, cy, cr) {
+            const dx = px - cx;
+            const dy = py - cy;
+            if (Math.sqrt(dx*dx + dy*dy) <= cr)
+                return true;
+            return false;
+        },
+        CircleCircle: function(cx, cy, cr, c2x, c2y, c2r) {
+            const dx = c2x - cx;
+            const dy = c2y - cy;
+            return (dx*dx + dy*dy <= cr*cr + c2r*c2r);
+        }
+    },
+    paths: {
+        pathWidth: 25,
+        pathColor: "#d5b482"
+    },
+    UNITS: {
+        TYPE: {
+            Guard: 1,
+            Archer: 2,
+            Catapult: 3,
+            Horse: 4
         }
     }
 }

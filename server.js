@@ -21,6 +21,18 @@ class Base {
         this.faction = faction;
         this.health = 100; //100 by default
         this.id = id;
+        this.units = [];
+    }
+}
+
+class Unit {
+    constructor(x, y, health, type) {
+        this.position = {
+            x,
+            y
+        };
+        this.health = health;
+        this.type = type;
     }
 }
 
@@ -59,7 +71,6 @@ io.on("connection", (socket) => {
 
             util.log("Starting game with " + socket.id + " and " + waitingClient);
 
-            
             //keep data on who is playing against who
             socketData.set(waitingClient, { opponent: socket.id });
             socketData.set(socket.id, { opponent: waitingClient });
@@ -69,6 +80,33 @@ io.on("connection", (socket) => {
 
             io.to(waitingClient).emit("foundGame", waitingClient);
             waitingClient = null;
+        }
+    })
+
+    //gameplay logic
+    socket.on("createUnit", (data) => {
+        //getting the base
+        let base = bases.filter((base) => {
+            if (base.id == socket.id) return true;
+            return false
+        });
+
+        //checking if there is a base
+        if (base.length > 0) {
+            base = base[0];
+
+            let unitType = "";
+
+            //find the unit type by looping over all the keys of the type and checking if the values match
+            Object.keys(util.UNITS.TYPE).forEach((value) => {
+                if (util.UNITS.TYPE[value] == data.type) {
+                    unitType = value;
+                }
+            })
+
+            base.units.push(new Unit(data.position.x, data.position.y, util.UNITS.HEALTH[unitType], unitType))
+        } else {
+            util.log("Base not found");
         }
     })
 })

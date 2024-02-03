@@ -6,9 +6,9 @@ class Path {
     }
 
     draw(ctx) {
-        ctx.strokeStyle = UTILS.colors.factions.Crimson;
+        ctx.strokeStyle = UTILS.paths.pathColor;
         ctx.lineCap = "round";
-        ctx.lineWidth = 20;
+        ctx.lineWidth = UTILS.paths.pathWidth;
         ctx.beginPath();
         ctx.moveTo(this.a.x, this.a.y);
         ctx.lineTo(this.b.x, this.b.y);

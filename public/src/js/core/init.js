@@ -28,6 +28,13 @@ function init() {
         new Path(new Vector(0, 0), new Vector(100, 100))
     ];
 
+    //resetting units
+    yourUnits = [];
+    otherUnits = [];
+
+    //resetting dragged unit to prevent object not found errors
+    selectedUnit = null;
+
     CANVAS.style.background = "rgba(0, 0, 0, 0.9)";
     createUnitOverlay.style.display = "none";
 }
