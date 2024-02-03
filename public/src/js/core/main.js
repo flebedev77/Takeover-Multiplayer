@@ -92,6 +92,12 @@ socket.on("opponentLeft", () => {
     window.location.reload(); //later replace with reinitialisiatrion (can't spell)
 })
 
-window.onclick = function() {
-    
+window.onclick = function(e) {
+    //if mouse is over your base
+    if (yourBase && UTILS.collision.AABB(e.x, e.y, 2, 2, yourBase.position.x, yourBase.position.y, yourBase.width, yourBase.height)) {
+        createUnitOverlay.style.display = "flex";
+        createUnitOverlay.style.top = yourBase.position.y + "px";
+        createUnitOverlay.style.left = yourBase.position.x + "px";
+    } else
+        createUnitOverlay.style.display = "none";
 }

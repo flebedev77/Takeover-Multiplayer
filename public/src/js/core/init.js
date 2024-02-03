@@ -21,8 +21,8 @@ startBtn.addEventListener("click", function() {
 
 function init() {
     //x, y, ysize, image - width is handled with the aspect ratio
-    yourBase = new Grass(0, 0, 50);
-    otherBase = new Crimson(0, 0, 50);
+    yourBase = new Grass(0, 0, 100);
+    otherBase = new Crimson(0, 0, 100);
 
     paths = [
         new Path(new Vector(0, 0), new Vector(100, 100))

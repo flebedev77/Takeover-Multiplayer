@@ -1,6 +1,7 @@
 body {
     font-family: sans-serif;
 }
+
 #canvas {
     position: fixed;
     top: 0;
@@ -9,6 +10,7 @@ body {
     right: 0;
     background: url("../img/png/title.png");
 }
+
 .start-overlay {
     position: absolute;
     top: 50%;
@@ -64,16 +66,19 @@ button:hover {
     gap: 10px;
     padding: 30px 40px;
     display: none;
+    transform: translate(-50%, -50%);
 }
 
 .ingame-overlay button {
     padding: 5px;
+    width: min-content;
+    aspect-ratio: 1 / 1;
     background: rgb(63, 128, 69);
     color: white;
-    border: 1px lightgray solid;
+    border: 1px rgb(28, 79, 42) solid;
     border-radius: 3px;
 }
 .ingame-overlay button:hover {
     background: rgb(68, 143, 75);
-    border: 1px rgb(227, 227, 227) solid;
+    border: 1px rgb(22, 62, 33) solid;
 }
