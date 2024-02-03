@@ -6,6 +6,10 @@ const startBtn = document.getElementById("startBtn");
 
 const centerOverlay = document.querySelector(".center-overlay");
 
+const createUnitOverlay = document.querySelector(".ingame-overlay");
+const guardButton = document.getElementById("guardButton");
+const archerButton = document.getElementById("archerButton");
+
 //first child should be the title
 const centerOverlayTitle = centerOverlay.children[0];
 

@@ -8,8 +8,20 @@ class Vector {
         this.x = x;
         this.y = y;
     }
-    add(vec) {
+    add(vec = new Vector(0, 0)) {
         return new Vector(this.x+vec.x, this.y+vec.y);
+    }
+    mag() {
+        //pythagoras
+        return Math.sqrt(-this.x * -this.x + -this.y * -this.y);
+    }
+    normalized() {
+        return new Vector(this.x / this.mag(), this.y / this.mag());
+    }
+    dot(B = new Vector(0, 0)) {
+        //a · b = ax × bx + ay × by
+        let b = B.normalized(); //make sure the other vector is normalized
+        return this.x * b.x + this.y * b.y;
     }
 }
 
@@ -36,9 +48,10 @@ const UTILS = {
 
             if (ctx) {
                 //drawing
+                ctx.textAlign = "left";
                 ctx.fillStyle = "white";
                 ctx.font = "normal 15px sans-serif";
-                ctx.fillText("FPS: " + this.framesPerSecond, 50, 30);
+                ctx.fillText("FPS: " + this.framesPerSecond, 10, 30);
             }
         }
     },
@@ -60,5 +73,31 @@ const UTILS = {
         Crimson: 2,
         Ice: 3,
         Undead: 4
+    },
+    network: {
+        prevPing: 0,
+        ping: 0,
+        updatePing: function() {
+            //keep track of the last time this function was called then to get ping it is just currenttimestamp - prevfunctioncall
+            let currentPing = Date.now();
+            this.ping = currentPing - this.prevPing;
+            this.prevPing = Date.now();
+        },
+        drawPing: function(ctx = null) {
+            if (ctx) {
+                ctx.textAlign = "left";
+                ctx.fillStyle = "white";
+                ctx.font = "normal 15px sans-serif";
+                ctx.fillText("PING: " + this.ping, 10, 50);
+            }
+        }
+    },
+    colors: {
+        factions: {
+            Grass: "#68d601",
+            Undead: "#9766f4",
+            Crimson: "#f8ce1c",
+            Ice: "#13f6f8"
+        }
     }
 }

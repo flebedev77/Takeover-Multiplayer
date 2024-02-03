@@ -19,6 +19,7 @@ class Base {
             y
         };
         this.faction = faction;
+        this.health = 100; //100 by default
         this.id = id;
     }
 }
@@ -58,6 +59,7 @@ io.on("connection", (socket) => {
 
             util.log("Starting game with " + socket.id + " and " + waitingClient);
 
+            
             //keep data on who is playing against who
             socketData.set(waitingClient, { opponent: socket.id });
             socketData.set(socket.id, { opponent: waitingClient });
