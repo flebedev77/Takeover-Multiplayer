@@ -3,6 +3,8 @@ const express = require("express");
 const app = express();
 const port = 3000;
 
+const fs = require("fs");
+
 app.use(express.static("public"));
 const server = app.listen(port, util.log(`Server listening on port ${port}`));
 
@@ -10,7 +12,13 @@ const io = require("socket.io")(server);
 
 let waitingClient = null; //the client socket id which is waiting for a person to versus
 
-const serverMinPing = 100;//500;
+let serverMinPing = 100;//500; //500 for slow servers, 100 for fast servers
+
+function loadConfiguration() {
+    const data = JSON.parse(fs.readFileSync(__dirname + "/server_settings/configuration.json", { encoding: 'utf8', flag: 'r' }));
+    serverMinPing = Number(data.MaxServerPing);
+}
+loadConfiguration();
 
 class Base {
     constructor(x, y, faction, id) {

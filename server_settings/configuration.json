@@ -1,0 +1,4 @@
+{
+    "MaxServerPing": "300",
+    "MaxServerPingDescription": "MaxServerPing is the rate at which the server updates the clients with newly calculated data"
+}
