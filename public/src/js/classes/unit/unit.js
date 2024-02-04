@@ -13,6 +13,8 @@ class Unit {
         this.speed = 0.1;
         this.target = new Vector(-10, -10);
 
+        this.type = UTILS.UNITS.TYPE.Guard;
+
         this.arrowTarget = new Vector(-10, -10);
         this.movementArrowAngleOffset = Math.PI/4; //45 deg
         this.movementArrowLength = 10; //length of the triangle at the end of the line
@@ -78,5 +80,16 @@ class Unit {
                 this.target.y = -10;
             }
         }
+    }
+}
+
+//Vital data to be sent over the wire
+class NetworkUnit {
+    constructor(x, y, type) {
+        this.position = {
+            x,
+            y
+        };
+        this.type = type;
     }
 }

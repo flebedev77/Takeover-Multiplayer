@@ -42,7 +42,7 @@ function loop() {
     CTX.fillStyle = "white";
     CTX.textAlign = "center";
     CTX.font = "bold 20px sans-serif";
-    CTX.fillText("Your Base", yourBase.position.x + yourBase.width/2, yourBase.position.y + yourBase.height + 25);
+    CTX.fillText("Your Base", yourBase.position.x + yourBase.width / 2, yourBase.position.y + yourBase.height + 25);
     otherBase.draw(CTX);
 
     requestAnimationFrame(loop);
@@ -59,11 +59,12 @@ socket.on("heartbeat", (ourBase, other) => {
     yourBase.position = ourBase.position;
     otherBase.position = other.position;
 
+    //sync paths
     if (paths[0]) {
-        paths[0].a.x = yourBase.position.x + yourBase.width/2;
-        paths[0].a.y = yourBase.position.y + yourBase.height/2;
-        paths[0].b.x = otherBase.position.x + otherBase.width/2;
-        paths[0].b.y = otherBase.position.y + otherBase.height/2;
+        paths[0].a.x = yourBase.position.x + yourBase.width / 2;
+        paths[0].a.y = yourBase.position.y + yourBase.height / 2;
+        paths[0].b.x = otherBase.position.x + otherBase.width / 2;
+        paths[0].b.y = otherBase.position.y + otherBase.height / 2;
     }
 
     //sync factions for you
@@ -95,6 +96,44 @@ socket.on("heartbeat", (ourBase, other) => {
             otherBase.healthbarColor = UTILS.colors.factions.Undead;
         }
     }
+
+    //sync units
+    other.units.forEach((unit, i) => {
+        //this client dosen't have all the units
+        if (otherUnits.length <= i) {
+            //if need to add a guard
+            if (UTILS.UNITS.TYPE[unit.type] == UTILS.UNITS.TYPE.Guard) {
+                otherUnits.push(new Guard(unit.position.x, unit.position.y));
+            } else if (UTILS.UNITS.TYPE[unit.type] == UTILS.UNITS.TYPE.Archer) {
+                otherUnits.push(new Archer(unit.position.x, unit.position.y));
+            }
+        } else {
+            otherUnits[i].position = unit.position;
+        }
+    });
+
+    let unsyncedUnits = [];
+
+    //sync your units in case they have died
+    // ourBase.units.forEach((unit, i) => {
+    //     if (yourUnits.length <= i) {
+    //         if (UTILS.UNITS.TYPE[unit.type] == UTILS.UNITS.TYPE.Guard) {
+    //             yourUnits.push(new Guard(unit.position.x, unit.position.y));
+    //         } else if (UTILS.UNITS.TYPE[unit.type] == UTILS.UNITS.TYPE.Archer) {
+    //             yourUnits.push(new Archer(unit.position.x, unit.position.y));
+    //         }
+    //     } else {
+    //         //if (unit.position.x != yourUnits[i].position.x || unit.position.y != yourUnits[i].position.y) {
+                
+    //         //}
+    //     }
+    // });
+
+    yourUnits.forEach((yourUnit) => {
+        unsyncedUnits.push(new NetworkUnit(yourUnit.position.x, yourUnit.position.y, yourUnit.type))
+    })
+
+    socket.emit("updateUnits", unsyncedUnits);
 })
 
 socket.on("opponentLeft", () => {
@@ -102,7 +141,7 @@ socket.on("opponentLeft", () => {
     window.location.reload(); //later replace with reinitialisiatrion (can't spell)
 })
 
-canvas.onclick = function(e) {
+canvas.onclick = function (e) {
     //if mouse is over your base
     if (createUnitOverlay.style.display == "none" && yourBase && UTILS.collision.AABB(e.x, e.y, 2, 2, yourBase.position.x, yourBase.position.y, yourBase.width, yourBase.height)) {
         createUnitOverlay.style.display = "flex";
@@ -112,26 +151,26 @@ canvas.onclick = function(e) {
         createUnitOverlay.style.display = "none";
 }
 
-guardButton.onclick = function() {
-    yourUnits.push(new Guard(yourBase.position.x+yourBase.width/2, yourBase.position.y+yourBase.height/2));
+guardButton.onclick = function () {
+    yourUnits.push(new Guard(yourBase.position.x + yourBase.width / 2, yourBase.position.y + yourBase.height / 2));
     createUnitOverlay.style.display = "none";
 
-    socket.emit("createUnit", { type: UTILS.UNITS.TYPE.Guard, position: yourUnits[yourUnits.length-1].position });
+    socket.emit("createUnit", { type: UTILS.UNITS.TYPE.Guard, position: yourUnits[yourUnits.length - 1].position });
 }
-archerButton.onclick = function() {
-    yourUnits.push(new Archer(yourBase.position.x+yourBase.width/2, yourBase.position.y+yourBase.height/2))
+archerButton.onclick = function () {
+    yourUnits.push(new Archer(yourBase.position.x + yourBase.width / 2, yourBase.position.y + yourBase.height / 2))
     createUnitOverlay.style.display = "none";
 
-    socket.emit("createUnit", { type: UTILS.UNITS.TYPE.Archer, position: yourUnits[yourUnits.length-1].position });
+    socket.emit("createUnit", { type: UTILS.UNITS.TYPE.Archer, position: yourUnits[yourUnits.length - 1].position });
 }
 
-window.onmousedown = function(e) {
+window.onmousedown = function (e) {
     mouse.down = true;
 
     let foundUnit = false;
     //check if we clicked on a unit an keep track if we did
     yourUnits.forEach((unit) => {
-        if (UTILS.collision.PointCircle(e.x, e.y, unit.iconPosition.x+unit.iconScale/2, unit.iconPosition.y+unit.iconScale/2, unit.iconScale)) {
+        if (UTILS.collision.PointCircle(e.x, e.y, unit.iconPosition.x + unit.iconScale / 2, unit.iconPosition.y + unit.iconScale / 2, unit.iconScale)) {
             selectedUnit = unit;
             selectedUnit.arrowTarget = mouse.position;
             foundUnit = true;
@@ -144,20 +183,23 @@ window.onmousedown = function(e) {
     }
 }
 
-window.onmouseup = function(e) {
+window.onmouseup = function (e) {
     mouse.down = false;
 
     //if we have a selected unit then move it to the point where we released
     if (selectedUnit) {
         selectedUnit.target = new Vector(e.x, e.y);
         selectedUnit.arrowTarget = new Vector(-10, -10);
-
-        console.log(selectedUnit.target);
         selectedUnit = null;
     }
+
+    //make sure there is no arrow for any unit
+    yourUnits.forEach((unit) => {
+        unit.arrowTarget = new Vector(-10, -10);
+    })
 }
 
-window.onmousemove = function(e) {
+window.onmousemove = function (e) {
     mouse.position.x = e.x;
     mouse.position.y = e.y;
 }

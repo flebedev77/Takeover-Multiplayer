@@ -108,6 +108,25 @@ io.on("connection", (socket) => {
         } else {
             util.log("Base not found");
         }
+    });
+
+    //syncing units
+    socket.on("updateUnits", (units) => {
+        let base = bases.filter((base) => {
+            if (base.id == socket.id) return true;
+            return false
+        });
+
+        if (base.length > 0) {
+            base = base[0];
+            units.forEach((unit, i) => {
+                if (base.units[i]) {
+                    base.units[i].position = unit.position;
+                }
+            })
+        } else {
+            util.log("Base not found");
+        }
     })
 })
 

@@ -14,3 +14,4 @@ https://takeover.game-files.crazygames.com/takeover/1/index.html but multiplayer
 ## Credits
  - flebedev77 - Code
  - Ixespikez - Art
+ - Irysoft - Original game
