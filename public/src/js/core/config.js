@@ -36,3 +36,12 @@ let otherUnits = [];
 
 //mouse drag moving
 let selectedUnit = null;
+
+//mouse stuff
+let mouse = {
+    position: {
+        x: 0,
+        y: 0
+    },
+    down: false
+}

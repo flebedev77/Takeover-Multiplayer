@@ -102,9 +102,9 @@ socket.on("opponentLeft", () => {
     window.location.reload(); //later replace with reinitialisiatrion (can't spell)
 })
 
-window.onclick = function(e) {
+canvas.onclick = function(e) {
     //if mouse is over your base
-    if (yourBase && UTILS.collision.AABB(e.x, e.y, 2, 2, yourBase.position.x, yourBase.position.y, yourBase.width, yourBase.height)) {
+    if (createUnitOverlay.style.display == "none" && yourBase && UTILS.collision.AABB(e.x, e.y, 2, 2, yourBase.position.x, yourBase.position.y, yourBase.width, yourBase.height)) {
         createUnitOverlay.style.display = "flex";
         createUnitOverlay.style.top = yourBase.position.y + "px";
         createUnitOverlay.style.left = yourBase.position.x + "px";
@@ -126,11 +126,14 @@ archerButton.onclick = function() {
 }
 
 window.onmousedown = function(e) {
+    mouse.down = true;
+
     let foundUnit = false;
     //check if we clicked on a unit an keep track if we did
     yourUnits.forEach((unit) => {
         if (UTILS.collision.PointCircle(e.x, e.y, unit.iconPosition.x+unit.iconScale/2, unit.iconPosition.y+unit.iconScale/2, unit.iconScale)) {
             selectedUnit = unit;
+            selectedUnit.arrowTarget = mouse.position;
             foundUnit = true;
         }
     })
@@ -139,16 +142,22 @@ window.onmousedown = function(e) {
     if (foundUnit == false) {
         selectedUnit = null;
     }
-
-    console.log(selectedUnit);
 }
 
 window.onmouseup = function(e) {
+    mouse.down = false;
+
     //if we have a selected unit then move it to the point where we released
     if (selectedUnit) {
         selectedUnit.target = new Vector(e.x, e.y);
+        selectedUnit.arrowTarget = new Vector(-10, -10);
 
         console.log(selectedUnit.target);
         selectedUnit = null;
     }
+}
+
+window.onmousemove = function(e) {
+    mouse.position.x = e.x;
+    mouse.position.y = e.y;
 }
