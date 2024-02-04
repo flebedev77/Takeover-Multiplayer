@@ -13,6 +13,10 @@ class Unit {
         this.speed = 0.1;
         this.target = new Vector(-10, -10);
 
+        this.health = 100;
+        this.maxHealth = this.health;
+        this.healthPadding = 5;
+
         this.type = UTILS.UNITS.TYPE.Guard;
 
         this.arrowTarget = new Vector(-10, -10);
@@ -24,6 +28,16 @@ class Unit {
         if (this.icon) { //drawing the unit icon
             this.iconPosition.x = (this.position.x + this.iconOffset.x) - this.iconScale / 2;
             this.iconPosition.y = (this.position.y + this.iconOffset.y) - this.iconScale;
+
+            //draw the healthbar
+            ctx.fillStyle = UTILS.colors.healthBar;
+            ctx.beginPath();
+            let maxAngle = Math.PI*2;
+            ctx.arc(this.iconPosition.x + this.iconScale/2, this.iconPosition.y + this.iconScale/2, this.iconScale/2 + this.healthPadding, Math.PI/2, (this.health / this.maxHealth) * maxAngle + Math.PI/2);
+            ctx.lineTo(this.iconPosition.x + this.iconScale/2, this.iconPosition.y + this.iconScale/2);
+            ctx.fill();
+            ctx.closePath();
+
             ctx.drawImage(this.icon, this.iconPosition.x, this.iconPosition.y, this.iconScale, this.iconScale);
         }
         if (this.image == null) { //if no image draw debug
@@ -85,12 +99,13 @@ class Unit {
 
 //Vital data to be sent over the wire
 class NetworkUnit {
-    constructor(x, y, type, target) {
+    constructor(x, y, type, target, health) {
         this.position = {
             x,
             y
         };
         this.type = type;
         this.target = target;
+        this.health = health;
     }
 }

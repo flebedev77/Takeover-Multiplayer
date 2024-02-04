@@ -132,6 +132,7 @@ io.on("connection", (socket) => {
                 if (base.units[i]) {
                     base.units[i].position = unit.position;
                     base.units[i].target = unit.target;
+                    base.units[i].health = unit.health;
                 }
             })
         } else {

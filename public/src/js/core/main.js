@@ -110,28 +110,14 @@ socket.on("heartbeat", (ourBase, other) => {
         } else {
             otherUnits[i].position = unit.position;
             otherUnits[i].target = unit.target;
+            otherUnits[i].health = unit.health;
         }
     });
 
     let unsyncedUnits = [];
 
-    //sync your units in case they have died
-    // ourBase.units.forEach((unit, i) => {
-    //     if (yourUnits.length <= i) {
-    //         if (UTILS.UNITS.TYPE[unit.type] == UTILS.UNITS.TYPE.Guard) {
-    //             yourUnits.push(new Guard(unit.position.x, unit.position.y));
-    //         } else if (UTILS.UNITS.TYPE[unit.type] == UTILS.UNITS.TYPE.Archer) {
-    //             yourUnits.push(new Archer(unit.position.x, unit.position.y));
-    //         }
-    //     } else {
-    //         //if (unit.position.x != yourUnits[i].position.x || unit.position.y != yourUnits[i].position.y) {
-                
-    //         //}
-    //     }
-    // });
-
     yourUnits.forEach((yourUnit) => {
-        unsyncedUnits.push(new NetworkUnit(yourUnit.position.x, yourUnit.position.y, yourUnit.type, { x: yourUnit.target.x, y: yourUnit.target.y }))
+        unsyncedUnits.push(new NetworkUnit(yourUnit.position.x, yourUnit.position.y, yourUnit.type, { x: yourUnit.target.x, y: yourUnit.target.y }, yourUnit.health))
     })
 
     socket.emit("updateUnits", unsyncedUnits);
