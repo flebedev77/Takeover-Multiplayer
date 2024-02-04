@@ -29,13 +29,17 @@ function loop() {
     })
 
     yourUnits.forEach((unit) => {
-        unit.update();
-        unit.draw(CTX);
+        if (unit.health > 0) {
+            unit.update();
+            unit.draw(CTX);
+        }
     })
 
     otherUnits.forEach((unit) => {
-        unit.update();
-        unit.draw(CTX);
+        if (unit.health > 0) {
+            unit.update();
+            unit.draw(CTX);
+        }
     })
 
     yourBase.draw(CTX);

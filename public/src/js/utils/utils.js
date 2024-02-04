@@ -103,7 +103,7 @@ const UTILS = {
             Crimson: "#f8ce1c",
             Ice: "#13f6f8"
         },
-        healthBar: "white"
+        healthBar: "rgba(230, 230, 230, 0.9)"
     },
     collision: {
         AABB: function(x1, y1, w1, h1, x2, y2, w2, h2) {
@@ -138,6 +138,12 @@ const UTILS = {
             Archer: 2,
             Catapult: 3,
             Horse: 4
+        },
+        HEALTH: {
+            Guard: 100,
+            Archer: 80,
+            Catapult: 50,
+            Horse: 90
         }
     }
 }
