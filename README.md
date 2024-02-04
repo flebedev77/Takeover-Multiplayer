@@ -11,7 +11,13 @@ https://takeover.game-files.crazygames.com/takeover/1/index.html but multiplayer
  - Open a browser to `http://localhost:3000`
  - Play the game
 
-## Credits
+ ---------
+
+## If you want to tweak
+ - In server_settings there is a file called configuration.json
+ - You can tweak the values to best fit your needs and your hardware
+
+### Credits
  - flebedev77 - Code
  - Ixespikez - Art
  - Irysoft - Original game
