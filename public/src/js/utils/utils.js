@@ -103,7 +103,7 @@ const UTILS = {
             Crimson: "#f8ce1c",
             Ice: "#13f6f8"
         },
-        healthBar: "rgba(230, 230, 230, 0.9)"
+        healthBar: "#68d601"
     },
     collision: {
         AABB: function(x1, y1, w1, h1, x2, y2, w2, h2) {

@@ -1,27 +1,43 @@
 class Unit {
     constructor(x, y, icon = null, image = null) {
+        //core
         this.position = {
             x,
             y
         };
         this.radius = 10;
         this.image = image;
+        this.speed = 0.1; //walkspeed
+        this.target = new Vector(-10, -10);
+        this.type = UTILS.UNITS.TYPE.Guard;
+
+        //icon
         this.icon = icon;
         this.iconOffset = new Vector(0, -30);
         this.iconScale = 50;
         this.iconPosition = new Vector(0, 0);
-        this.speed = 0.1;
-        this.target = new Vector(-10, -10);
 
+        //health
         this.health = 100;
         this.maxHealth = this.health;
-        this.healthPadding = 5;
+        this.healthPadding = 3;
+        
+        //health smoothing
+        this.smoothHealth = this.health;
+        this.healthSmoothness = 5; //The amount the health is divided
 
-        this.type = UTILS.UNITS.TYPE.Guard;
-
+        //arrow
         this.arrowTarget = new Vector(-10, -10);
         this.movementArrowAngleOffset = Math.PI/4; //45 deg
         this.movementArrowLength = 10; //length of the triangle at the end of the line
+
+        //attacking
+        this.damage = 10; //the damage the unit deals
+        this.attackRate = 1000; //the delay of the unit attacking in ms
+        this.attackDelay = this.attackRate;
+        this.viewDistance = 10; //distance the unit sees the enemy and starts attacking
+
+        this.attackDistance = 5; //distance at which unit can deal damage archers - far, guards - short
     }
 
     draw(ctx = CTX) {
@@ -29,11 +45,16 @@ class Unit {
             this.iconPosition.x = (this.position.x + this.iconOffset.x) - this.iconScale / 2;
             this.iconPosition.y = (this.position.y + this.iconOffset.y) - this.iconScale;
 
+            //update the healthbar
+            this.smoothHealth += (this.health - this.smoothHealth) / this.healthSmoothness;
+            this.smoothHealth = Math.min(this.smoothHealth, this.maxHealth); //clamp the smooth health
+            this.smoothHealth = Math.max(this.smoothHealth, 0);
+
             //draw the healthbar
             ctx.fillStyle = UTILS.colors.healthBar;
             ctx.beginPath();
             let maxAngle = Math.PI*2;
-            ctx.arc(this.iconPosition.x + this.iconScale/2, this.iconPosition.y + this.iconScale/2, this.iconScale/2 + this.healthPadding, Math.PI/2, (this.health / this.maxHealth) * maxAngle + Math.PI/2);
+            ctx.arc(this.iconPosition.x + this.iconScale/2, this.iconPosition.y + this.iconScale/2, this.iconScale/2 + this.healthPadding, Math.PI/2, (this.smoothHealth / this.maxHealth) * maxAngle + Math.PI/2);
             ctx.lineTo(this.iconPosition.x + this.iconScale/2, this.iconPosition.y + this.iconScale/2);
             ctx.fill();
             ctx.closePath();
@@ -85,13 +106,46 @@ class Unit {
             const dirMag = Math.sqrt(dirX * dirX + dirY * dirY);
 
             //if we are far away move
-            if (dirMag > this.speed + 1) {
+            if (dirMag > (this.speed + 1) * UTILS.time.deltaTime) {
                 this.position.x += (dirX / dirMag) * this.speed * UTILS.time.deltaTime;
                 this.position.y += (dirY / dirMag) * this.speed * UTILS.time.deltaTime;
             } else {
                 //if close enough stop
                 this.target.x = -10;
                 this.target.y = -10;
+            }
+        }
+
+        otherUnits.forEach((unit, i) => {
+            if (unit.health > 0) { //loop through all alive units
+                this.attack(unit, i); //put in the unit to damage and its index in all the server/client arrays
+            }
+        })
+    }
+
+    attack(unit, i) {
+        //using pythagoras to find the distance https://www.mathsisfun.com/pythagoras.html
+        const dx = unit.position.x - this.position.x;
+        const dy = unit.position.y - this.position.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+
+        //can see unit
+        if (this.viewDistance <= dist) {
+            //console.log("Target seen");
+            //if not close enough move to it
+            if (dist > (this.attackDistance + this.speed + 1) * UTILS.time.deltaTime) {
+                this.target = new Vector(unit.position.x, unit.position.y);
+            } else if (dist <= (this.attackDistance + this.speed + 1) * UTILS.time.deltaTime) {
+                console.log("Attacking " + i);
+                //if close enough then stop and attack
+                this.target = new Vector(-10, -10);
+
+                this.attackDelay += UTILS.time.deltaTime;
+                if (this.attackDelay >= this.attackRate) {
+                    this.attackDelay = 0;
+                    socket.emit("dealDamage", { type: this.type, unit: i })
+                    unit.health -= this.damage;
+                }
             }
         }
     }

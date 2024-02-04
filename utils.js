@@ -31,6 +31,12 @@ module.exports = {
             Archer: 80,
             Catapult: 50,
             Horse: 90
+        },
+        DAMAGE: {
+            Guard: 10,
+            Archer: 15,
+            Catapult: 70,
+            Horse: 8
         }
     }
 }

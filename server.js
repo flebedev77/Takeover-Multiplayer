@@ -4,6 +4,7 @@ const app = express();
 const port = 3000;
 
 const fs = require("fs");
+const { validateHeaderName } = require("http");
 
 app.use(express.static("public"));
 const server = app.listen(port, util.log(`Server listening on port ${port}`));
@@ -138,7 +139,33 @@ io.on("connection", (socket) => {
         } else {
             util.log("Base not found");
         }
-    })
+    });
+
+    socket.on("dealDamage", (data) => {
+        if (!socketData.get(socket.id)) return;
+
+        let base = bases.filter((base) => {
+            if (base.id == socketData.get(socket.id).opponent) return true;
+            return false;
+        });
+
+        if (base.length > 0) {
+            base = base[0];
+            if (base.units[data.unit]) {
+                //find the damage the unit type does
+                Object.keys(util.UNITS.TYPE).forEach((val) => {
+                    if (util.UNITS.TYPE[val] == data.type) {
+                        //subtract from the server version and send to user
+                        base.units[data.unit].health -= util.UNITS.DAMAGE[val];
+
+                        socket.to(socketData.get(socket.id).opponent).emit("takeDamage", { id: data.unit, damage: util.UNITS.DAMAGE[val] })
+                    }
+                })
+            }
+        } else {
+            util.log("Base not found");
+        }
+    });
 })
 
 setInterval(function () {

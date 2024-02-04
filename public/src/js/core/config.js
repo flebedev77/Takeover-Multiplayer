@@ -45,3 +45,5 @@ let mouse = {
     },
     down: false
 }
+
+console.log("STOP! DON'T");

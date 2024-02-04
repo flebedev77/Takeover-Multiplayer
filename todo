@@ -1,4 +1,4 @@
-Add paths
+Make units actually delete when they die by deleting at client and sending the index at which to delete to the server
+Store health on the server
 Add message system
 Make bases spawn further apart
-Add guard units

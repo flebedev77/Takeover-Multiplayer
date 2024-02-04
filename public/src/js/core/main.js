@@ -132,6 +132,12 @@ socket.on("opponentLeft", () => {
     window.location.reload(); //later replace with reinitialisiatrion (can't spell)
 })
 
+socket.on("takeDamage", (data) => {
+    if (yourUnits[data.id]) {
+        yourUnits[data.id].health -= Number(data.damage);
+    }
+})
+
 canvas.onclick = function (e) {
     //if mouse is over your base
     if (createUnitOverlay.style.display == "none" && yourBase && UTILS.collision.AABB(e.x, e.y, 2, 2, yourBase.position.x, yourBase.position.y, yourBase.width, yourBase.height)) {
