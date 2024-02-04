@@ -10,7 +10,7 @@ const io = require("socket.io")(server);
 
 let waitingClient = null; //the client socket id which is waiting for a person to versus
 
-const serverMinPing = 500;
+const serverMinPing = 100;//500;
 
 class Base {
     constructor(x, y, faction, id) {
@@ -33,6 +33,7 @@ class Unit {
         };
         this.health = health;
         this.type = type;
+        this.target = { x: -10, y: -10 };
     }
 }
 
@@ -122,6 +123,7 @@ io.on("connection", (socket) => {
             units.forEach((unit, i) => {
                 if (base.units[i]) {
                     base.units[i].position = unit.position;
+                    base.units[i].target = unit.target;
                 }
             })
         } else {

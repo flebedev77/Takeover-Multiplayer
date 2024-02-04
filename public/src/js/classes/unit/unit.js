@@ -85,11 +85,12 @@ class Unit {
 
 //Vital data to be sent over the wire
 class NetworkUnit {
-    constructor(x, y, type) {
+    constructor(x, y, type, target) {
         this.position = {
             x,
             y
         };
         this.type = type;
+        this.target = target;
     }
 }

@@ -109,6 +109,7 @@ socket.on("heartbeat", (ourBase, other) => {
             }
         } else {
             otherUnits[i].position = unit.position;
+            otherUnits[i].target = unit.target;
         }
     });
 
@@ -130,7 +131,7 @@ socket.on("heartbeat", (ourBase, other) => {
     // });
 
     yourUnits.forEach((yourUnit) => {
-        unsyncedUnits.push(new NetworkUnit(yourUnit.position.x, yourUnit.position.y, yourUnit.type))
+        unsyncedUnits.push(new NetworkUnit(yourUnit.position.x, yourUnit.position.y, yourUnit.type, { x: yourUnit.target.x, y: yourUnit.target.y }))
     })
 
     socket.emit("updateUnits", unsyncedUnits);
