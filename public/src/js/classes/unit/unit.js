@@ -1,5 +1,5 @@
 class Unit {
-    constructor(x, y, icon = null, image = null) {
+    constructor(x, y, icon = null, image = null, enemy = false) {
         //core
         this.position = {
             x,
@@ -32,12 +32,14 @@ class Unit {
         this.movementArrowLength = 10; //length of the triangle at the end of the line
 
         //attacking
-        this.damage = 10; //the damage the unit deals
+        //this.damage = 10; //the damage the unit deals *Server handles damage*
         this.attackRate = 1000; //the delay of the unit attacking in ms
         this.attackDelay = this.attackRate;
-        this.viewDistance = 10; //distance the unit sees the enemy and starts attacking
+        this.viewDistance = 100; //distance the unit sees the enemy and starts attacking
 
         this.attackDistance = 5; //distance at which unit can deal damage archers - far, guards - short
+
+        this.enemy = enemy
     }
 
     draw(ctx = CTX) {
@@ -116,6 +118,9 @@ class Unit {
             }
         }
 
+        //if we are an enemy don't do actuall attacking
+        if (this.enemy) return;
+        
         otherUnits.forEach((unit, i) => {
             if (unit.health > 0) { //loop through all alive units
                 this.attack(unit, i); //put in the unit to damage and its index in all the server/client arrays
@@ -129,14 +134,16 @@ class Unit {
         const dy = unit.position.y - this.position.y;
         const dist = Math.sqrt(dx*dx + dy*dy);
 
+        console.log(this.position);
+
         //can see unit
-        if (this.viewDistance <= dist) {
+        if (dist < this.viewDistance && this.health > 0) {
             //console.log("Target seen");
             //if not close enough move to it
-            if (dist > (this.attackDistance + this.speed + 1) * UTILS.time.deltaTime) {
+            if (dist > this.attackDistance + this.speed * UTILS.time.deltaTime) {
                 this.target = new Vector(unit.position.x, unit.position.y);
-            } else if (dist <= (this.attackDistance + this.speed + 1) * UTILS.time.deltaTime) {
-                console.log("Attacking " + i);
+            } else if (dist <= this.attackDistance + this.speed * UTILS.time.deltaTime) {
+                //console.log("Attacking " + i);
                 //if close enough then stop and attack
                 this.target = new Vector(-10, -10);
 

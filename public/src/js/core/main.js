@@ -107,9 +107,10 @@ socket.on("heartbeat", (ourBase, other) => {
         if (otherUnits.length <= i) {
             //if need to add a guard
             if (UTILS.UNITS.TYPE[unit.type] == UTILS.UNITS.TYPE.Guard) {
-                otherUnits.push(new Guard(unit.position.x, unit.position.y));
+                //here pass true at the end because this unit is just a display - it should not be able to attack
+                otherUnits.push(new Guard(unit.position.x, unit.position.y, true));
             } else if (UTILS.UNITS.TYPE[unit.type] == UTILS.UNITS.TYPE.Archer) {
-                otherUnits.push(new Archer(unit.position.x, unit.position.y));
+                otherUnits.push(new Archer(unit.position.x, unit.position.y, true));
             }
         } else {
             otherUnits[i].position = unit.position;
@@ -133,7 +134,8 @@ socket.on("opponentLeft", () => {
 })
 
 socket.on("takeDamage", (data) => {
-    if (yourUnits[data.id]) {
+    //check if we have a unit to damage and check if we didn't deal the damage in the first place to not damage ourselfs
+    if (yourUnits[data.id] && data.socket != socket.id) {
         yourUnits[data.id].health -= Number(data.damage);
     }
 })

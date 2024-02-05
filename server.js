@@ -51,6 +51,7 @@ const bases = [];
 const socketData = new Map();
 
 io.on("connection", (socket) => {
+    socket.join(socket.id);
     util.log(`${socket.id} Online`);
 
     socket.on("disconnect", () => {
@@ -158,7 +159,8 @@ io.on("connection", (socket) => {
                         //subtract from the server version and send to user
                         base.units[data.unit].health -= util.UNITS.DAMAGE[val];
 
-                        socket.to(socketData.get(socket.id).opponent).emit("takeDamage", { id: data.unit, damage: util.UNITS.DAMAGE[val] })
+                        //if the opponent is the host takedamage will send to the person which is dealing the damage, so send who dealt the damage to know who to damage and who to not
+                        io.to(socketData.get(socket.id).opponent).emit("takeDamage", { id: data.unit, damage: util.UNITS.DAMAGE[val], socket: socket.id })
                     }
                 })
             }
