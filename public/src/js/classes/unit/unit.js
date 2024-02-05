@@ -32,7 +32,7 @@ class Unit {
         this.movementArrowLength = 10; //length of the triangle at the end of the line
 
         //attacking
-        //this.damage = 10; //the damage the unit deals *Server handles damage*
+        this.damage = 10; //the damage the unit deals *Server handles damage* //makes dealing damage feel frictionless
         this.attackRate = 1000; //the delay of the unit attacking in ms
         this.attackDelay = this.attackRate;
         this.viewDistance = 100; //distance the unit sees the enemy and starts attacking
@@ -118,14 +118,16 @@ class Unit {
             }
         }
 
-        //if we are an enemy don't do actuall attacking
+        //if we are an enemy don't do actually attacking
         if (this.enemy) return;
         
         otherUnits.forEach((unit, i) => {
             if (unit.health > 0) { //loop through all alive units
                 this.attack(unit, i); //put in the unit to damage and its index in all the server/client arrays
             }
-        })
+        });
+
+        this.attackBase();
     }
 
     attack(unit, i) {
@@ -153,6 +155,32 @@ class Unit {
                     socket.emit("dealDamage", { type: this.type, unit: i })
                     unit.health -= this.damage;
                 }
+            }
+        }
+    }
+
+    attackBase() {
+        //if we are moving then don't bother attacking base
+        if (this.target.x != -10) return;
+
+        //find the distance to the base
+        const dx = (otherBase.position.x+otherBase.width/2) - this.position.x;
+        const dy = (otherBase.position.y+otherBase.height) - this.position.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+
+        //if the unit can see the base
+        if (dist < this.viewDistance) {
+
+            //if we are too far away to attack move to it
+            if (dist > this.attackDistance + this.speed * UTILS.time.deltaTime) {
+                //move to the bottom middle of the base
+                this.target = new Vector(otherBase.position.x+otherBase.width/2, otherBase.position.y+otherBase.height);
+            } else {
+                //stop and attack
+                this.target = new Vector(-10, -10);
+
+                socket.emit("damageBase", { type: this.type });
+                otherBase.health -= this.damage;
             }
         }
     }

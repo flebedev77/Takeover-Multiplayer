@@ -140,6 +140,13 @@ socket.on("takeDamage", (data) => {
     }
 })
 
+socket.on("takeBaseDamage", (data) => {
+    //check if we have a base to damage and check if we didn't deal the damage in the first place to not damage ourselfs
+    if (yourBase && yourBase.health > 0 && data.socket != socket.id) {
+        yourBase.health -= Number(data.damage);
+    }
+})
+
 canvas.onclick = function (e) {
     //if mouse is over your base
     if (createUnitOverlay.style.display == "none" && yourBase && UTILS.collision.AABB(e.x, e.y, 2, 2, yourBase.position.x, yourBase.position.y, yourBase.width, yourBase.height)) {

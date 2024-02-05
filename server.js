@@ -4,7 +4,6 @@ const app = express();
 const port = 3000;
 
 const fs = require("fs");
-const { validateHeaderName } = require("http");
 
 app.use(express.static("public"));
 const server = app.listen(port, util.log(`Server listening on port ${port}`));
@@ -168,6 +167,32 @@ io.on("connection", (socket) => {
             util.log("Base not found");
         }
     });
+
+    socket.on("damageBase", (data) => {
+        if (!socketData.get(socket.id)) return;
+
+        //find opponent base
+        let base = bases.filter((base) => {
+            if (base.id == socketData.get(socket.id).opponent) return true;
+            return false;
+        });
+
+        if (base.length > 0) {
+            base = base[0];
+            //find the damage the unit type does
+            Object.keys(util.UNITS.TYPE).forEach((val) => {
+                if (util.UNITS.TYPE[val] == data.type) {
+                    //subtract from the server version and send to user
+                    base.health -= util.UNITS.DAMAGE[val];
+
+                    //if the opponent is the host takedamage will send to the person which is dealing the damage, so send who dealt the damage to know who to damage and who to not
+                    io.to(socketData.get(socket.id).opponent).emit("takeBaseDamage", { damage: util.UNITS.DAMAGE[val], socket: socket.id })
+                }
+            })
+        } else {
+            util.log("Base not found");
+        }
+    })
 })
 
 setInterval(function () {
