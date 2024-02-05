@@ -7,6 +7,7 @@
     <title>Takeover Multiplayer</title>
     <link rel="stylesheet" href="src/css/style.css">
     <script src="src/lib/js/socket.io.js"></script>
+    <script src="src/js/core/message.js" defer></script>
     <script src="src/js/core/config.js" defer></script>
     <script src="src/js/utils/utils.js" defer></script>
     <script src="src/js/classes/base.js" defer></script>
@@ -33,6 +34,14 @@
     <div class="ingame-overlay">
         <button id="guardButton">Guards<br>$100</button>
         <button id="archerButton">Archers<br>$120</button>
+    </div>
+    <div class="message-overlay">
+        <!-- Example message
+        <div>
+            <p>Your message here</p>
+            <img src="src/img/svg/close.svg"/>
+        </div> 
+        -->
     </div>
     <canvas id="canvas"></canvas>
 </body>

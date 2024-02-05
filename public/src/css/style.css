@@ -85,3 +85,31 @@ button:hover {
     background: rgb(68, 143, 75);
     border: 1px rgb(22, 62, 33) solid;
 }
+
+.message-overlay {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 100;
+}
+
+.message-overlay > div {
+    background: white;
+    display: flex;
+    gap: 5px;
+    padding: 10px 15px;
+    align-items: center;
+    margin-bottom: 5px;
+    border-radius: 3px;
+}
+
+.message-overlay > div > * {
+    margin: 0;
+    padding: 0;
+    color: rgba(0, 0, 0, 0.9);
+}
+
+.message-overlay > div > img {
+    filter: invert(32%) sepia(0%) saturate(1212%) hue-rotate(153deg) brightness(94%) contrast(89%);
+}

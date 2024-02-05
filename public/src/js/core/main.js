@@ -129,8 +129,9 @@ socket.on("heartbeat", (ourBase, other) => {
 })
 
 socket.on("opponentLeft", () => {
-    alert("Your opponent left");
-    window.location.reload(); //later replace with reinitialisiatrion (can't spell)
+    displayMessage("Your opponent left", 2000, function() {
+        window.location.reload();
+    });
 })
 
 socket.on("takeDamage", (data) => {
