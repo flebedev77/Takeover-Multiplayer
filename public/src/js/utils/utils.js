@@ -144,6 +144,9 @@ const UTILS = {
             Archer: 80,
             Catapult: 50,
             Horse: 90
+        },
+        RANGE: {
+            Archer: 60
         }
     }
 }

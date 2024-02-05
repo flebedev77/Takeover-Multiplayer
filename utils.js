@@ -38,5 +38,8 @@ module.exports = {
             Catapult: 70,
             Horse: 8
         }
+    },
+    SPAWNING: {
+        basePadding: 50
     }
 }

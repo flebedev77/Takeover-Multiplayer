@@ -1,4 +1,5 @@
 const util = require("./utils");
+const spawner = require("./spawnBase");
 const express = require("express");
 const app = express();
 const port = 3000;
@@ -74,6 +75,8 @@ io.on("connection", (socket) => {
             //joining to a room with own id is unessesary because socketio does that by default
             waitingClient = socket.id;
 
+            socketData.set(waitingClient, { screenW: screen.w, screenH: screen.h });
+
             util.log("Client waiting for an opponent with id " + socket.id);
         } else {
             //if someone was waiting join them
@@ -82,11 +85,13 @@ io.on("connection", (socket) => {
             util.log("Starting game with " + socket.id + " and " + waitingClient);
 
             //keep data on who is playing against who
-            socketData.set(waitingClient, { opponent: socket.id });
-            socketData.set(socket.id, { opponent: waitingClient });
+            socketData.set(waitingClient, { opponent: socket.id, screenW: socketData.get(waitingClient).screenW, screenH: socketData.get(waitingClient).screenH });
+            socketData.set(socket.id, { opponent: waitingClient, screenW: screen.w, screenH: screen.h });
 
-            bases.push(new Base(Math.floor(Math.random() * screen.w), Math.floor(Math.random() * screen.h), util.PickRandomFaction(), socket.id));
-            bases.push(new Base(Math.floor(Math.random() * screen.w), Math.floor(Math.random() * screen.h), util.PickRandomFaction(), waitingClient));
+            const basePositions = spawner.spawnBases(Math.min(screen.w, socketData.get(waitingClient).screenW), Math.min(screen.h, socketData.get(waitingClient).screenH));
+
+            bases.push(new Base(basePositions[0].x, basePositions[0].y, util.PickRandomFaction(), socket.id));
+            bases.push(new Base(basePositions[1].x, basePositions[1].y, util.PickRandomFaction(), waitingClient));
 
             io.to(waitingClient).emit("foundGame", waitingClient);
             waitingClient = null;

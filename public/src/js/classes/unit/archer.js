@@ -4,5 +4,6 @@ class Archer extends Unit {
         this.type = UTILS.UNITS.TYPE.Archer;
         this.health = UTILS.UNITS.HEALTH.Archer;
         this.maxHealth = this.health;
+        this.attackDistance = UTILS.UNITS.RANGE.Archer;
     }
 }
